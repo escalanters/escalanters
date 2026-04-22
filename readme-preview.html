@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sebastian Escalante — GitHub Profile</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=JetBrains+Mono:wght@300;400&display=swap"
+    rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --green: #00ffaa;
+      --green-dim: rgba(0, 255, 170, 0.12);
+      --green-border: rgba(0, 255, 170, 0.2);
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --text: #f0f0f0;
+      --muted: #888;
+      --faint: #333;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      min-height: 100vh;
+      padding: 48px 0;
+    }
+
+    .page {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+    }
+
+    /* ── BANNER ── */
+    .banner {
+      width: 100%;
+      height: 240px;
+      background: var(--bg);
+      border: 1px solid var(--faint);
+      position: relative;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0, 255, 180, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 180, 0.04) 1px, transparent 1px);
+      background-size: 36px 36px;
+    }
+
+    .blob1 {
+      position: absolute;
+      width: 380px;
+      height: 380px;
+      background: radial-gradient(circle, rgba(0, 255, 150, 0.10) 0%, transparent 70%);
+      top: -120px;
+      right: 60px;
+      border-radius: 50%;
+    }
+
+    .blob2 {
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle, rgba(80, 120, 255, 0.08) 0%, transparent 70%);
+      bottom: -80px;
+      left: 160px;
+      border-radius: 50%;
+    }
+
+    .accent-line {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 3px;
+      height: 100%;
+      background: linear-gradient(180deg, transparent, var(--green), transparent);
+    }
+
+    .bracket-tl {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      width: 20px;
+      height: 20px;
+      border-top: 2px solid var(--green-border);
+      border-left: 2px solid var(--green-border);
+    }
+
+    .bracket-br {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      width: 20px;
+      height: 20px;
+      border-bottom: 2px solid var(--green-border);
+      border-right: 2px solid var(--green-border);
+    }
+
+    .dots {
+      position: absolute;
+      right: 220px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 7px;
+      opacity: 0.12;
+    }
+
+    .dot {
+      width: 3px;
+      height: 3px;
+      background: var(--green);
+      border-radius: 50%;
+    }
+
+    .banner-content {
+      position: relative;
+      z-index: 10;
+      padding: 0 52px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .b-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: 4px;
+      color: var(--green);
+      text-transform: uppercase;
+      opacity: 0.8;
+    }
+
+    .b-name {
+      font-size: 52px;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--text);
+      letter-spacing: -2px;
+    }
+
+    .b-name span {
+      color: var(--green);
+    }
+
+    .b-role {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+
+    .b-role em {
+      color: #aaa;
+      font-style: normal;
+    }
+
+    .banner-tags {
+      position: absolute;
+      right: 52px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 7px;
+      z-index: 10;
+    }
+
+    .tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      color: var(--green);
+      background: var(--green-dim);
+      border: 1px solid var(--green-border);
+      padding: 4px 10px;
+      text-transform: uppercase;
+    }
+
+    .tag.dim {
+      color: #555;
+      background: transparent;
+      border-color: #222;
+    }
+
+    /* ── SECTIONS ── */
+    .section {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .section-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 4px;
+      color: var(--green);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--faint), transparent);
+    }
+
+
+
+    /* ── STACK ── */
+    .stack-groups {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--faint);
+      border: 1px solid var(--faint);
+    }
+
+    .stack-group {
+      background: var(--bg);
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .group-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--text);
+      background: var(--surface);
+      border: 1px solid var(--faint);
+      padding: 4px 10px;
+      letter-spacing: 0.5px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .badge:hover {
+      border-color: var(--green-border);
+      color: var(--green);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <!-- BANNER -->
+    <div class="banner">
+      <div class="grid"></div>
+      <div class="blob1"></div>
+      <div class="blob2"></div>
+      <div class="accent-line"></div>
+      <div class="bracket-tl"></div>
+      <div class="bracket-br"></div>
+      <div class="dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div class="banner-content">
+        <div class="b-label"> software developer</div>
+        <div class="b-name">Sebastian<br><span>Escalante</span></div>
+        <div class="b-role">Fullstack · Remote</div>
+      </div>
+
+    </div>
+
+    <!-- STACK -->
+    <div class="section">
+      <div class="stack-groups">
+        <div class="stack-group">
+          <div class="group-title">Frontend</div>
+          <div class="badges">
+            <span class="badge">React</span>
+            <span class="badge">TypeScript</span>
+            <span class="badge">Tailwind CSS</span>
+            <span class="badge">Vite</span>
+          </div>
+        </div>
+        <div class="stack-group">
+          <div class="group-title">Backend</div>
+          <div class="badges">
+            <span class="badge">Node.js</span>
+            <span class="badge">Express</span>
+            <span class="badge">Supabase</span>
+            <span class="badge">JWT</span>
+          </div>
+        </div>
+        <div class="stack-group">
+          <div class="group-title">Lenguajes</div>
+          <div class="badges">
+            <span class="badge">TypeScript</span>
+            <span class="badge">Java</span>
+            <span class="badge">HTML</span>
+            <span class="badge">CSS</span>
+          </div>
+        </div>
+        <div class="stack-group">
+          <div class="group-title">DevOps / Tools</div>
+          <div class="badges">
+            <span class="badge">Git</span>
+            <span class="badge">Vercel</span>
+            <span class="badge">Cloudflare R2</span>
+            <span class="badge">Linux</span>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+</body>
+
+</html>
