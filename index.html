@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>escalanters</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111111;
+      --surface2: #181818;
+      --surface3: #1f1f1f;
+      --border: #222222;
+      --border2: #2e2e2e;
+      --border3: #3a3a3a;
+
+      --text-high: #ffffff;
+      --text-mid: #cccccc;
+      --text-low: #888888;
+      --text-faint: #404040;
+
+      --accent: #e8ff47;
+      --accent-dim: rgba(232, 255, 71, 0.07);
+      --accent-border: rgba(232, 255, 71, 0.22);
+      --accent-glow: rgba(232, 255, 71, 0.06);
+    }
+
+    /* noise texture */
+    body {
+      background: var(--bg);
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      font-family: 'Syne', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 52px 20px 80px;
+      color: var(--text-mid);
+    }
+
+    .page {
+      width: 100%;
+      max-width: 780px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .header {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* top bar */
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent) 0%, rgba(232, 255, 71, 0.15) 70%, transparent 100%);
+    }
+
+    /* large ghost initial — decorative */
+    .header-ghost {
+      position: absolute;
+      right: -20px;
+      top: -30px;
+      font-size: 220px;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -8px;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(255, 255, 255, 0.04);
+      user-select: none;
+      pointer-events: none;
+      font-family: 'Syne', sans-serif;
+    }
+
+    /* dot grid */
+    .header-dots {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 300px;
+      height: 100%;
+      background-image: radial-gradient(circle, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+      background-size: 20px 20px;
+      mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.6) 40%, black 100%);
+      -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.6) 40%, black 100%);
+      pointer-events: none;
+    }
+
+    /* radial glow bottom-right */
+    .header-glow {
+      position: absolute;
+      bottom: -60px;
+      right: -60px;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(232, 255, 71, 0.07) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .header-inner {
+      position: relative;
+      z-index: 2;
+      padding: 48px 48px 44px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .header-left {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    /* top meta row */
+    .header-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .header-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 4px;
+      color: var(--accent);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header-label::before {
+      content: '';
+      width: 22px;
+      height: 1px;
+      background: var(--accent);
+      opacity: 0.45;
+    }
+
+    .header-year {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--text-faint);
+      letter-spacing: 2px;
+    }
+
+    /* name */
+    .header-name {
+      font-size: 64px;
+      font-weight: 800;
+      line-height: 0.9;
+      letter-spacing: -3.5px;
+      margin-bottom: 24px;
+    }
+
+    .name-first {
+      color: var(--text-high);
+      display: block;
+    }
+
+    .name-last {
+      display: block;
+      -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.22);
+      color: transparent;
+    }
+
+    /* tagline */
+    .header-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-low);
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header-sub .sub-word {
+      color: var(--text-mid);
+    }
+
+    .header-sub .sub-dot {
+      width: 3px;
+      height: 3px;
+      background: var(--border3);
+      border-radius: 50%;
+    }
+
+    /* right side — stat pills */
+    .header-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+      padding-bottom: 2px;
+    }
+
+    .stat-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border: 1px solid var(--border2);
+      color: var(--text-low);
+      background: var(--surface2);
+      white-space: nowrap;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-pill::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--border3);
+    }
+
+    .stat-pill.lit {
+      color: var(--accent);
+      border-color: var(--accent-border);
+      background: var(--accent-dim);
+    }
+
+    .stat-pill.lit::before {
+      background: var(--accent);
+      opacity: 0.6;
+    }
+
+    /* bottom strip */
+    .header-strip {
+      height: 1px;
+      background: linear-gradient(90deg, var(--border2) 0%, transparent 100%);
+      margin: 0 48px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* corner brackets */
+    .corner {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      z-index: 3;
+    }
+
+    .corner-tl {
+      top: 16px;
+      left: 16px;
+      border-top: 1.5px solid var(--border2);
+      border-left: 1.5px solid var(--border2);
+    }
+
+    .corner-br {
+      bottom: 16px;
+      right: 16px;
+      border-bottom: 1.5px solid var(--border2);
+      border-right: 1.5px solid var(--border2);
+    }
+
+    .section-bar {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 0 10px;
+    }
+
+    .section-bar-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 3.5px;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .section-bar-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--border2) 0%, transparent 100%);
+    }
+
+    .stack {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+    }
+
+    .stack-cell {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 24px 26px 26px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* diagonal hatching */
+    .stack-cell::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(-55deg,
+          transparent, transparent 18px,
+          rgba(255, 255, 255, 0.011) 18px,
+          rgba(255, 255, 255, 0.011) 19px);
+      pointer-events: none;
+    }
+
+    /* corner glow */
+    .stack-cell::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 160px;
+      height: 160px;
+      background: radial-gradient(circle at 0% 0%, var(--accent-glow) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    /* left accent strip */
+    .cell-strip {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 2px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--accent) 0%, transparent 100%);
+      opacity: 0.3;
+    }
+
+    /* cell number */
+    .cell-num {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--text-faint);
+      letter-spacing: 1px;
+      z-index: 1;
+    }
+
+    /* category label */
+    .cell-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2.5px;
+      color: var(--text-low);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      padding-bottom: 11px;
+      border-bottom: 1px solid var(--border2);
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* small accent dot before label */
+    .cell-label::before {
+      content: '';
+      width: 4px;
+      height: 4px;
+      background: var(--accent);
+      border-radius: 50%;
+      opacity: 0.6;
+      flex-shrink: 0;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tags.nowrap {
+      flex-wrap: nowrap;
+    }
+
+    .tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-high);
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      padding: 5px 12px;
+      cursor: default;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.05),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+        0 1px 3px rgba(0, 0, 0, 0.3);
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
+    }
+
+    .tag:hover {
+      border-color: var(--accent-border);
+      color: var(--accent);
+      background: var(--accent-dim);
+    }
+
+    .footer-bar {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .footer-bar::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, var(--accent) 0%, rgba(232, 255, 71, 0.1) 40%, transparent 100%);
+      opacity: 0.4;
+    }
+
+    .footer-handle {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-faint);
+      letter-spacing: 1px;
+    }
+
+    .footer-handle span {
+      color: var(--text-low);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-link {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .footer-link:hover {
+      color: var(--accent);
+    }
+
+    .footer-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.7;
+      box-shadow: 0 0 6px var(--accent);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="corner corner-tl"></div>
+      <div class="corner corner-br"></div>
+      <div class="header-dots"></div>
+      <div class="header-glow"></div>
+      <div class="header-ghost">SE</div>
+
+      <div class="header-inner">
+        <div class="header-left">
+          <div class="header-meta-row">
+            <div class="header-label">Student & Freelance Software Developer</div>
+
+          </div>
+          <div class="header-name">
+            <span class="name-first">Sebastian</span>
+            <span class="name-last">Escalante</span>
+          </div>
+          <div class="header-sub">
+            <span class="sub-word">Fullstack</span>
+            <div class="sub-dot"></div>
+            <span class="sub-word">Remote</span>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <div class="stat-pill lit">Available</div>
+          <div class="stat-pill">ITSON · México</div>
+        </div>
+      </div>
+
+      <div class="header-strip"></div>
+    </div>
+
+    <!-- SECTION BAR -->
+    <div class="section-bar">
+      <div class="section-bar-label">stack</div>
+      <div class="section-bar-line"></div>
+    </div>
+
+    <!-- STACK -->
+    <div class="stack">
+      <div class="stack-cell">
+        <div class="cell-strip"></div>
+        <div class="cell-num">01</div>
+        <div class="cell-label">Frontend</div>
+        <div class="tags nowrap">
+          <span class="tag" style="font-size:10.5px;padding:5px 10px;">React</span>
+          <span class="tag" style="font-size:10.5px;padding:5px 10px;">TypeScript</span>
+          <span class="tag" style="font-size:10.5px;padding:5px 10px;">Tailwind CSS</span>
+          <span class="tag" style="font-size:10.5px;padding:5px 10px;">Vite</span>
+        </div>
+      </div>
+      <div class="stack-cell">
+        <div class="cell-strip"></div>
+        <div class="cell-num">02</div>
+        <div class="cell-label">Backend</div>
+        <div class="tags">
+          <span class="tag">Node.js</span>
+          <span class="tag">Express</span>
+          <span class="tag">Supabase</span>
+          <span class="tag">JWT</span>
+        </div>
+      </div>
+      <div class="stack-cell">
+        <div class="cell-strip"></div>
+        <div class="cell-num">03</div>
+        <div class="cell-label">Lenguajes</div>
+        <div class="tags">
+          <span class="tag">TypeScript</span>
+          <span class="tag">Java</span>
+          <span class="tag">HTML</span>
+          <span class="tag">CSS</span>
+        </div>
+      </div>
+      <div class="stack-cell">
+        <div class="cell-strip"></div>
+        <div class="cell-num">04</div>
+        <div class="cell-label">DevOps / Tools</div>
+        <div class="tags">
+          <span class="tag">Git</span>
+          <span class="tag">Vercel</span>
+          <span class="tag">Cloudflare R2</span>
+          <span class="tag">Linux</span>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</body>
+
+</html>
