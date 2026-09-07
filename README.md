@@ -1,6 +1,6 @@
 <img src="./banner_sebas.webp" alt="Sebastian Escalante - Fullstack Web Developer" width="100%" />
 
-## ¡Hola! 👋
+## ¡Que tal!
 
 Me llamo Sebastian Escalante, soy desarrollador fullstack en [HyperLabs](https://www.hyperlabs.vc/) y estudiante de **Ingeniería de Software** en ITSON. 
 ###  Trabajando ahora
