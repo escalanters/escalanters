@@ -1,4 +1,4 @@
-<img src="./banner_sebas.webp" alt="Sebastian Escalante - Fullstack Web Developer" width="100%" />
+<img src="./banner_sebas.webp?v=2" alt="Sebastian Escalante - Fullstack Web Developer" width="100%" />
 
 ## ¡Que tal!
 
