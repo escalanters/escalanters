@@ -6,7 +6,7 @@ Me llamo Sebastian Escalante, soy desarrollador fullstack en [HyperLabs](https:/
 ###  Trabajando ahora
 - **TeamUp**  reclutamiento de personal operativo a escala, en producción en [teamup.mx](https://teamup.mx).
 - **PotroNET**  red social para la comunidad del ITSON, en [potronet.com](https://potronet.com).
-- **IVirtual-Wrap** extensión del navegador que provee una UI mejorada en [ivirtual.itson.edu.mx](https://ivirtual.itson.edu.mx/)
+- **IVirtual-Wrap** extensión del navegador que provee una UI mejorada de en IVirtual en [ivirtual.potronet.com](https://ivirtual.potronet.com).
 - **FloreriaKO** ecommerce local en producción en [floreriako.com](https://www.floreriako.com/)
 
 
